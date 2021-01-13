@@ -55,7 +55,7 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
     private final Timer timer;
 
     // 再描画タイミング
-    private static final int INTERVAL = 50;
+    private static final int INTERVAL = 20;
 
     public Panel4GameBoard() {
         timer   = new Timer(INTERVAL, this);
@@ -82,7 +82,20 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
     public void actionPerformed(ActionEvent event) {
         ball.next();
         ball2.next();
+        reflectBall(ball, ball2);
         repaint();
+    }
+
+    public void reflectBall(Ball ball1, Ball ball2) {
+        double dist = Math.pow((ball1.getVx() - ball2.getVx()), 2)
+                + Math.pow((ball1.getVy() - ball2.getVy()), 2);
+        double thresholdDist = Math.pow(ball1.getR(), 2) + Math.pow(ball2.getR(), 2);
+        if (dist == thresholdDist) {
+            ball1.setVx(-ball1.getVx());
+            ball1.setVy(-ball1.getVy());
+            ball2.setVx(-ball2.getVx());
+            ball2.setVy(-ball2.getVy());
+        }
     }
 
     /*--- KeyListener ---*/
