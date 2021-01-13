@@ -29,29 +29,10 @@ public class PinBall  {
 }
 
 
-//class ControlledJFrame extends JFrame {
-//    public ControlledJFrame(String title, int width, int height) {
-//        setTitle(title);
-//        setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        setSize(width,height);
-//        setLocationRelativeTo(null);
-//        setLayout(null);
-//        setResizable(false);
-//        setFocusable(true);
-//
-//        Panel4GameBoard panel = new Panel4GameBoard();
-//
-//        add(panel);
-//        setVisible(true);
-//
-//        panel.animationStart();
-//    }
-//}
-
-
 class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
     private final Ball ball;
     private final Ball ball2;
+    private final Ball ball3;
     private final Timer timer;
 
     // 再描画タイミング
@@ -61,6 +42,7 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
         timer   = new Timer(INTERVAL, this);
         ball    = new Ball(this);
         ball2   = new Ball(15, 20, 20, 5, 5, Color.green, this);
+        ball3   = new Ball(8, 40, 40, 30, 30, Color.orange, this);
 
         setFocusable(true);
         addKeyListener(this);
@@ -76,13 +58,15 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
         super.paintComponent(graphics);
         ball.draw(graphics);
         ball2.draw(graphics);
+        ball3.draw(graphics);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        reflectBall(ball, ball2);
         ball.next();
         ball2.next();
+        ball3.next();
+        reflectBall(ball, ball2);
         repaint();
     }
 
@@ -90,6 +74,7 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
         double dist = Math.pow((ball1.getX() - ball2.getX()), 2)
                 + Math.pow((ball1.getY() - ball2.getY()), 2);
         double thresholdDist = Math.pow(ball1.getR()+ball2.getR(), 2);
+
         if (dist == thresholdDist) {
             ball1.setVx(-ball1.getVx());
             ball1.setVy(-ball1.getVy());
@@ -102,20 +87,20 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
     /*--- KeyListener ---*/
     @Override
     public void keyTyped(KeyEvent e) {
-        switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP:
+        switch (e.getKeyChar()) {
+            case 'w':
                 ball.setVy(-15.0);
                 System.out.println("Pressed UP");
                 break;
-            case KeyEvent.VK_RIGHT:
+            case 'd':
                 ball.setVx(15.0);
                 System.out.println("Pressed RIGHT");
                 break;
-            case KeyEvent.VK_LEFT:
+            case 'a':
                 ball.setVx(-15.0);
                 System.out.println("Pressed LEFT");
                 break;
-            case KeyEvent.VK_DOWN:
+            case 's':
                 ball.setVy(15.0);
                 System.out.println("Pressed DOWN");
                 break;
