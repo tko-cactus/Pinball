@@ -80,21 +80,22 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent event) {
+        reflectBall(ball, ball2);
         ball.next();
         ball2.next();
-        reflectBall(ball, ball2);
         repaint();
     }
 
     public void reflectBall(Ball ball1, Ball ball2) {
-        double dist = Math.pow((ball1.getVx() - ball2.getVx()), 2)
-                + Math.pow((ball1.getVy() - ball2.getVy()), 2);
-        double thresholdDist = Math.pow(ball1.getR(), 2) + Math.pow(ball2.getR(), 2);
+        double dist = Math.pow((ball1.getX() - ball2.getX()), 2)
+                + Math.pow((ball1.getY() - ball2.getY()), 2);
+        double thresholdDist = Math.pow(ball1.getR()+ball2.getR(), 2);
         if (dist == thresholdDist) {
             ball1.setVx(-ball1.getVx());
             ball1.setVy(-ball1.getVy());
             ball2.setVx(-ball2.getVx());
             ball2.setVy(-ball2.getVy());
+            System.out.println("Ball touched");
         }
     }
 

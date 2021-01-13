@@ -30,7 +30,7 @@ public class Ball implements KeyListener {
     private double g = 0.5;
 
     // 反発係数
-    private double e = 1.0;
+    private double e = 0.8;
 
     // ボールを描画するパネル
     private JPanel panel;
