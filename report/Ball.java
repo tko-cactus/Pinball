@@ -33,7 +33,7 @@ public class Ball implements KeyListener {
     private double e = 0.8;
 
     // ボールを描画するパネル
-    private JPanel panel;
+    private final JPanel panel;
 
     public Ball(JPanel panel) {
         this.panel = panel;

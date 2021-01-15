@@ -80,21 +80,38 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
         ball.next();
+        removeBlock();
         repaint();
     }
 
-    public void reflectBall(Ball ball1, Ball ball2) {
-        double dist = Math.pow((ball1.getX() - ball2.getX()), 2)
-                + Math.pow((ball1.getY() - ball2.getY()), 2);
-        double thresholdDist = Math.pow(ball1.getR()+ball2.getR(), 2);
-
-        if (dist == thresholdDist) {
-            ball1.setVx(-ball1.getVx());
-            ball1.setVy(-ball1.getVy());
-            ball2.setVx(-ball2.getVx());
-            ball2.setVy(-ball2.getVy());
-            System.out.println("Ball touched");
+    public void removeBlock() {
+        if (isBallTouchBlock()) {
+            System.out.println("Ball touched!");
+        } else {
+            System.out.println('X');
         }
+    }
+
+    public boolean isBallTouchBlock() {
+        double r = ball.getR();
+        double x = ball.getX();
+        double y = ball.getY();
+
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                double block_left = block[i][j].getX();
+                double block_right = block_left + block[i][j].getWidth();
+                if (((block_left - r) < x) && (x < (block_right + r))) {
+                    double block_top = block[i][j].getY();
+                    double block_bottom = block_top + block[i][j].getHeight();
+                    if (((block_top - r) < y) && (y < (block_bottom + r))) {
+                        block[i][j].setColor(Color.red);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /*--- KeyListener ---*/
