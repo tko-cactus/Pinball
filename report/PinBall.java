@@ -14,9 +14,12 @@ import javax.swing.Timer;
 
 public class PinBall  {
     public static void main(String[] args) {
+        final int win_width = 650;
+        final int win_height = 400;
+
         JFrame window = new JFrame("PinBall");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setSize(650, 400);
+        window.setSize(win_width, win_height);
 
         Panel4GameBoard panel = new Panel4GameBoard();
 
@@ -30,9 +33,14 @@ public class PinBall  {
 
 
 class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
+    private final int MARGIN_ROW = 30;
+    private final int MARGIN_COL = 20;
+    private final int ROW = 3;
+    private final int COL = 10;
     private final Ball ball;
-    private final Ball ball2;
-    private final Ball ball3;
+//    private final Ball ball2;
+//    private final Ball ball3;
+    private final Block[][] block = new Block[ROW][COL];
     private final Timer timer;
 
     // 再描画タイミング
@@ -41,8 +49,12 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
     public Panel4GameBoard() {
         timer   = new Timer(INTERVAL, this);
         ball    = new Ball(this);
-        ball2   = new Ball(15, 20, 20, 5, 5, Color.green, this);
-        ball3   = new Ball(8, 40, 40, 30, 30, Color.orange, this);
+
+        for (int i = 0; i < ROW; i++){
+            for (int j = 0; j < COL; j++) {
+                block[i][j] = new Block(MARGIN_ROW+60*j, MARGIN_COL+50*i, this);
+            }
+        }
 
         setFocusable(true);
         addKeyListener(this);
@@ -57,16 +69,17 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         ball.draw(graphics);
-        ball2.draw(graphics);
-        ball3.draw(graphics);
+        for (int i = 0; i < ROW; i++) {
+            for (int j = 0; j < COL; j++) {
+                block[i][j].draw(graphics);
+            }
+        }
+
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
         ball.next();
-        ball2.next();
-        ball3.next();
-        reflectBall(ball, ball2);
         repaint();
     }
 
@@ -87,6 +100,11 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
     /*--- KeyListener ---*/
     @Override
     public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
         switch (e.getKeyChar()) {
             case 'w':
                 ball.setVy(-15.0);
@@ -106,11 +124,6 @@ class Panel4GameBoard extends JPanel implements KeyListener, ActionListener {
                 break;
         }
         repaint();
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
     }
 
     @Override
